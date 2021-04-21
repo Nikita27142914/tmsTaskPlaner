@@ -4,7 +4,7 @@ import {useState, useRef} from "react";
 import {TaskItem} from "../taskItem/TaskItem";
 import "./TaskList.sass"
 
-export const TaskList = ({tasks, tasksType, addNewTask}) => {
+export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateType, addNewTask}) => {
 
     const [taskName, setTaskName] = useState('');
 
@@ -12,26 +12,33 @@ export const TaskList = ({tasks, tasksType, addNewTask}) => {
 
     const handleInputChange = (event) => {
 
+        //Убрать ошибки если они были
+        if(dublicateTypeCreate) {
+        
+          resetDublicateType(tasksType);
+        
+        }
+
         setTaskName(event.target.value);
 
     }
 
-    const hangleKeyDown = (event) => {
+    const handleKeyDown = (event) => {
 
         if(event.key === 'Enter') {
 
             inputEl.current.blur();
 
-            addNewTask(taskName, tasksType);
+            if(addNewTask(taskName, tasksType)) {
 
-            setTaskName("");
+              setTaskName("");
+            
+            }
 
         }
 
     }
 
-    // console.log("TaskList ", tasks);
- 
     return (
       <div className="task-list">
 
@@ -47,14 +54,21 @@ export const TaskList = ({tasks, tasksType, addNewTask}) => {
                name={tasksType} 
                value={taskName} 
                onChange={handleInputChange}
-               onKeyDown={hangleKeyDown} />
+               onKeyDown={handleKeyDown} />
+        
+        { 
+          dublicateTypeCreate
+            &&
+          <span className='task-list-error'>Задача с таким уже существует</span>
+        }
   
       </div>
     );
   }
 
 TaskList.propTypes = {
-  tasks: PropTypes.object,
   tasksType: PropTypes.string,
+  dublicateTypeCreate: PropTypes.bool,
+  tasks: PropTypes.object,
   addNewTask: PropTypes.func
 };

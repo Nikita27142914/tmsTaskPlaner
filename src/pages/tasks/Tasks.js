@@ -7,15 +7,55 @@ import "./Tasks.scss";
 export const TasksPage = () => {
 
     const [tasks, setTasks] = useState({unImportant: [], important: [], veryImportant: []});
+    
+    const [dublicateTypeCreate, setDublicateTypeCreate] = useState({unImportant: false}, {important: false}, {veryImportant: false});
 
-    const onAddNewTask = (name, type) => {
+    //Создание задачи
+    const addNewTask = (name, type) => {
 
         const tasksCopy = {...tasks};
+        const {unImportant, important, veryImportant} = tasksCopy;
 
-        tasksCopy[type].push({checked: false, name});
+        //Задача будет создана если дубликатов нет
+        if(!checkDublicates(unImportant.concat(important, veryImportant), name)) {
+        
+            tasksCopy[type].push({checked: false, name});
 
-        setTasks(tasksCopy);
+            setTasks(tasksCopy);
+
+            return true;
+        
+        } else {
+
+            //Подсветить что дубликат есть
+            const dublicateTypeCreateCopy = {...dublicateTypeCreate};
+            dublicateTypeCreateCopy[type] = true;
+
+            setDublicateTypeCreate(dublicateTypeCreateCopy);
+
+            return false;
+
+        }
     
+    }
+
+    //Проверка на дубликаты при создании/редактировании
+    const checkDublicates = (tasks, name) => {   
+
+        const index = tasks.findIndex(task => task.name === name);
+
+        return index !== -1;
+
+    }
+
+    //Скинуть ошибку дубликата при фокусе
+    const resetDublicateType = (type) => {
+        
+        const dublicateTypeCreateCopy = {...dublicateTypeCreate};
+        dublicateTypeCreateCopy[type] = false;
+
+        setDublicateTypeCreate(dublicateTypeCreateCopy);
+
     }
 
     return (
@@ -32,9 +72,11 @@ export const TasksPage = () => {
                     Не важные задачи
                 </div>
 
-                <TaskList tasks={tasks.unImportant} 
-                          tasksType="unImportant"
-                          addNewTask={onAddNewTask} />
+                <TaskList tasksType="unImportant"
+                          dublicateTypeCreate={dublicateTypeCreate.unImportant} 
+                          tasks={tasks.unImportant}
+                          resetDublicateType={resetDublicateType}
+                          addNewTask={addNewTask} />
             </div>
 
             <div className="tasks-main-col">
@@ -42,9 +84,11 @@ export const TasksPage = () => {
                     Важные задачи
                 </div>
 
-                <TaskList tasks={tasks.important} 
-                          tasksType="important"
-                          addNewTask={onAddNewTask} />
+                <TaskList tasksType="important"
+                          dublicateTypeCreate={dublicateTypeCreate.important}
+                          tasks={tasks.important} 
+                          resetDublicateType={resetDublicateType}
+                          addNewTask={addNewTask} />
             </div>
 
             <div className="tasks-main-col">
@@ -52,9 +96,11 @@ export const TasksPage = () => {
                     Очень важные задачи
                 </div>
 
-                <TaskList tasks={tasks.veryImportant} 
-                          tasksType="veryImportant"
-                          addNewTask={onAddNewTask} />
+                <TaskList tasksType="veryImportant"
+                          dublicateTypeCreate={dublicateTypeCreate.veryImportant} 
+                          tasks={tasks.veryImportant}
+                          resetDublicateType={resetDublicateType}
+                          addNewTask={addNewTask} />
             </div>
         </div>
 
