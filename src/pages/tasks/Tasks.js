@@ -1,14 +1,15 @@
-import {useReducer} from "react";
+import {useDispatch, useSelector} from 'react-redux';
 
-import {TaskList} from "../../components";
-import {taskReducer, initialState} from "../../redux/reducers/taskReducer";
-import {createTask, checkDublicateTask} from "../../redux/actions/taskActions";
-import "./Tasks.scss";
+import {TaskList} from '../../components';
+import {createTask, checkDublicateTask} from '../../redux/actions/taskActions';
+import './Tasks.scss';
 
 
 export const TasksPage = () => {
 
-    const [tasksState, dispatch] = useReducer(taskReducer, initialState);
+    const dispatch = useDispatch();
+
+    const tasksState = useSelector(state => state.taskReducer);
 
     //Создание задачи
     const addNewTask = (name, type) => {
@@ -53,44 +54,44 @@ export const TasksPage = () => {
     }
 
     return (
-      <div className="tasks">
+      <div className='tasks'>
           
-        <div className="tasks-header">
+        <div className='tasks-header'>
             Планировщик задач
         </div>
 
 
-        <div className="tasks-main">
-            <div className="tasks-main-col">
-                <div className="tasks-main-col-unImportant">
+        <div className='tasks-main'>
+            <div className='tasks-main-col'>
+                <div className='tasks-main-col-unImportant'>
                     Не важные задачи
                 </div>
 
-                <TaskList tasksType="unImportant"
+                <TaskList tasksType='unImportant'
                           dublicateTypeCreate={tasksState.dublicateTypeCreate.unImportant} 
                           tasks={tasksState.tasks.unImportant}
                           resetDublicateType={resetDublicateType}
                           addNewTask={addNewTask} />
             </div>
 
-            <div className="tasks-main-col">
-                <div className="tasks-main-col-important">
+            <div className='tasks-main-col'>
+                <div className='tasks-main-col-important'>
                     Важные задачи
                 </div>
 
-                <TaskList tasksType="important"
+                <TaskList tasksType='important'
                           dublicateTypeCreate={tasksState.dublicateTypeCreate.important}
                           tasks={tasksState.tasks.important} 
                           resetDublicateType={resetDublicateType}
                           addNewTask={addNewTask} />
             </div>
 
-            <div className="tasks-main-col">
-                <div className="tasks-main-col-veryImportant">
+            <div className='tasks-main-col'>
+                <div className='tasks-main-col-veryImportant'>
                     Очень важные задачи
                 </div>
 
-                <TaskList tasksType="veryImportant"
+                <TaskList tasksType='veryImportant'
                           dublicateTypeCreate={tasksState.dublicateTypeCreate.veryImportant} 
                           tasks={tasksState.tasks.veryImportant}
                           resetDublicateType={resetDublicateType}

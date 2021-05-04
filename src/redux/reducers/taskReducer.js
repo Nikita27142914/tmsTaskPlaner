@@ -12,7 +12,9 @@ export const initialState = {
     }
 };
 
-export const taskReducer = (state, action) => {
+export const taskReducer = (state = initialState, action) => {
+
+    console.log('taskReducer ', action);
 
     const {type} = action; 
 
