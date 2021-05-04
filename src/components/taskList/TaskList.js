@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {useState, useRef} from "react";
+import {useState, useMemo, useRef} from "react";
 
 import {TaskItem} from "../taskItem/TaskItem";
 import "./TaskList.sass"
@@ -25,7 +25,7 @@ export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateT
 
     const handleKeyDown = (event) => {
 
-        if(event.key === 'Enter') {
+        if(event.key === 'Enter' && event.target.value !== "") {
 
             inputEl.current.blur();
 
@@ -37,7 +37,9 @@ export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateT
 
         }
 
-    }
+    };
+
+    const taskNameValue = useMemo(() => taskName, [taskName]);
 
     return (
       <div className="task-list">
@@ -52,7 +54,7 @@ export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateT
                ref={inputEl}
                placeholder="Введите название задачи..."
                name={tasksType} 
-               value={taskName} 
+               value={taskNameValue} 
                onChange={handleInputChange}
                onKeyDown={handleKeyDown} />
         
@@ -69,6 +71,6 @@ export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateT
 TaskList.propTypes = {
   tasksType: PropTypes.string,
   dublicateTypeCreate: PropTypes.bool,
-  tasks: PropTypes.object,
+  tasks: PropTypes.array,
   addNewTask: PropTypes.func
 };
