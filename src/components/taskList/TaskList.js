@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import {useState, useMemo, useRef} from "react";
+import {useState, useMemo, useRef} from 'react';
 
-import {TaskItem} from "../taskItem/TaskItem";
-import "./TaskList.sass"
+import {TaskItem} from '../taskItem/TaskItem';
+import './TaskList.scss';
 
 export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateType, addNewTask}) => {
 
@@ -25,13 +25,13 @@ export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateT
 
     const handleKeyDown = (event) => {
 
-        if(event.key === 'Enter' && event.target.value !== "") {
+        if(event.key === 'Enter' && event.target.value !== '') {
 
             inputEl.current.blur();
 
             if(addNewTask(taskName, tasksType)) {
 
-              setTaskName("");
+              setTaskName('');
             
             }
 
@@ -42,17 +42,21 @@ export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateT
     const taskNameValue = useMemo(() => taskName, [taskName]);
 
     return (
-      <div className="task-list">
+      <div className='task-list'>
 
         {tasks && tasks.length > 0 && tasks.map((task, index) => {
             return (
-                <TaskItem key={index} task={task} number={index} />
+                <TaskItem 
+                  key={index} 
+                  type={tasksType}
+                  task={task} 
+                  number={index} />
             )
         })}
 
-        <input type="text" 
+        <input type='text' 
                ref={inputEl}
-               placeholder="Введите название задачи..."
+               placeholder='Введите название задачи...'
                name={tasksType} 
                value={taskNameValue} 
                onChange={handleInputChange}

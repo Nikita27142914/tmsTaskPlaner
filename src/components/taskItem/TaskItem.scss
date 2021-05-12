@@ -1,0 +1,49 @@
+.task-item {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    text-align: start;
+    font-size: 20px;
+    margin-bottom: 20px;
+
+    input[type="checkbox"] {
+        display: inline-block;
+        align-self: center;
+        width: 20px;
+        height: 20px;
+    }
+
+    &-name {
+        display: inline-block;
+        align-self: center;
+        margin-left: 15px;
+    }
+
+    img {
+        cursor: pointer;
+        position: absolute;
+        align-self: center;
+        opacity: 0.8;
+
+        &:hover {
+            opacity: 0.9;
+        }
+
+        &:active {
+            opacity: 1;
+        }
+    }
+
+    .remove-icon {
+        right: 20px;
+        height: 30px;
+    }
+
+    .edit-icon {
+        right: 10px;
+        height: 45px;
+    }
+}

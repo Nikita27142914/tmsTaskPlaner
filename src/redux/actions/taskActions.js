@@ -1,7 +1,5 @@
 export const createTask = (data) => {
 
-    console.log('createTask ', data);
-
     const {name, type} = data.payload;
 
     return {
@@ -11,9 +9,28 @@ export const createTask = (data) => {
 
 } 
 
-export const checkDublicateTask = (data) => {
+export const checkTask = (data) => {
+    const {name, type, checked} = data.payload;
 
-    console.log('checkDublicateTask ', data);
+    return {
+        type: `CHECK_TASK_${data.type}`,
+        payload: {name, type, checked}
+    }
+
+}
+
+export const removeTask = (data) => {
+
+    const {name, type} = data.payload;
+
+    return {
+        type: `REMOVE_TASK_${data.type}`,
+        payload: {name, type}
+    }
+
+} 
+
+export const checkDublicateTask = (data) => {
 
     const {payload} = data;
 
