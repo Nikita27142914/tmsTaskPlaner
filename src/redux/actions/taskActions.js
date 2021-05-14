@@ -1,3 +1,15 @@
+export const addTasks = (data) => {
+
+    const {tasks, type} = data;
+
+    console.log('tasks ', tasks);
+
+    return {
+        type: `ADD_NEW_TASKS_${type}`,
+        payload: tasks
+    }
+}
+
 export const createTask = (data) => {
 
     const {name, type} = data.payload;
@@ -30,12 +42,13 @@ export const removeTask = (data) => {
 
 } 
 
-export const checkDublicateTask = (data) => {
+export const editTask = (data) => {
 
-    const {payload} = data;
+    const {name, type, editName} = data.payload;
 
     return {
-        type: `CHECK_DUBLICATE_${data.type}`,
-        payload
+        type: `EDIT_TASK_${data.type}`,
+        payload: {name, type, editName}
     }
+
 } 

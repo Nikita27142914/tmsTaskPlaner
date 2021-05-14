@@ -4,34 +4,39 @@ import {useState, useMemo, useRef} from 'react';
 import {TaskItem} from '../taskItem/TaskItem';
 import './TaskList.scss';
 
-export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateType, addNewTask}) => {
+export const TaskList = ({tasksType, tasks, addNewTask}) => {
 
     const [taskName, setTaskName] = useState('');
+    const [dublicateAdd, setDublicateAdd] = useState(false);
 
-    const inputEl = useRef(null);
+    const addInputEl = useRef(null);
 
-    const handleInputChange = (event) => {
+    const handleAddInputChange = (event) => {
 
         //Убрать ошибки если они были
-        if(dublicateTypeCreate) {
-        
-          resetDublicateType(tasksType);
-        
+        if(dublicateAdd) {
+          
+          setDublicateAdd(false);
+
         }
 
         setTaskName(event.target.value);
 
     }
 
-    const handleKeyDown = (event) => {
+    const handleAddKeyDown = (event) => {
 
-        if(event.key === 'Enter' && event.target.value !== '') {
+        if(event.key === 'Enter' && event.target.value.trim() !== '' && event.target.value.length < 20) {
 
-            inputEl.current.blur();
+          addInputEl.current.blur();
 
             if(addNewTask(taskName, tasksType)) {
 
               setTaskName('');
+            
+            } else {
+
+              setDublicateAdd(true);
             
             }
 
@@ -49,24 +54,32 @@ export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateT
                 <TaskItem 
                   key={index} 
                   type={tasksType}
-                  task={task} 
-                  number={index} />
+                  task={task}  />
             )
         })}
 
-        <input type='text' 
-               ref={inputEl}
-               placeholder='Введите название задачи...'
-               name={tasksType} 
-               value={taskNameValue} 
-               onChange={handleInputChange}
-               onKeyDown={handleKeyDown} />
-        
-        { 
-          dublicateTypeCreate
-            &&
-          <span className='task-list-error'>Задача с таким уже существует</span>
-        }
+        <div style={{marginBottom: '30px'}}>
+          <input type='text' 
+                className='input-add'
+                ref={addInputEl}
+                placeholder='Введите название задачи...'
+                value={taskNameValue} 
+                onChange={handleAddInputChange}
+                onKeyDown={handleAddKeyDown} />
+          
+          { 
+            dublicateAdd
+              &&
+            <span className='task-list-error'>Задача с таким уже существует</span>
+          }
+
+          
+          { 
+            taskName.length >= 20
+              &&
+            <span className='task-list-error'>Длина не может превыщать 20 символов</span>
+          }
+        </div>
   
       </div>
     );
@@ -74,7 +87,6 @@ export const TaskList = ({tasksType, tasks, dublicateTypeCreate, resetDublicateT
 
 TaskList.propTypes = {
   tasksType: PropTypes.string,
-  dublicateTypeCreate: PropTypes.bool,
   tasks: PropTypes.array,
   addNewTask: PropTypes.func
 };
