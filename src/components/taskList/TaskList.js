@@ -63,6 +63,7 @@ export const TaskList = ({tasksType, tasks, addNewTask}) => {
                 className='input-add'
                 ref={addInputEl}
                 placeholder='Введите название задачи...'
+                disabled={!JSON.parse(localStorage.getItem('isAdmin'))}
                 value={taskNameValue} 
                 onChange={handleAddInputChange}
                 onKeyDown={handleAddKeyDown} />

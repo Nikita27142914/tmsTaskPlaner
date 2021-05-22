@@ -29,7 +29,7 @@ export const TaskItem = ({type, task}) => {
 
     if(event.key === 'Enter' && event.target.value.trim() !== '' && event.target.value.length < 20) {
 
-      if(handleEditTask(type, task.name, editValue))
+      if(handleEditTask(task._id, type, task.name, editValue, task.checked))
 
         setEditMode(false);
       
@@ -62,17 +62,18 @@ export const TaskItem = ({type, task}) => {
         <div className='task-item'>
           <input type='checkbox' 
                 checked={task.checked}
-                onChange={(event) => handleCheckTask(type, task.name, event.target.checked)}  />
+                onChange={(event) => handleCheckTask(task._id, type, task.name, event.target.checked)}  />
 
           <span className='task-item-name'>{task.name}</span> 
 
           {
             task.checked 
               ?
-            <img className='remove-icon' 
+            (JSON.parse(localStorage.getItem('isAdmin')) ? <img className='remove-icon' 
                 src={removeIcon} 
                 onClick={() => handleRemoveTask(task._id, task.name, type)}
-                alt='removeIcon' />
+                alt='removeIcon' /> : <></>
+            )
               :
             <img className='edit-icon' 
               src={editIcon} 

@@ -1,10 +1,12 @@
 import {useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import './Login.scss';
 
 export const LoginPage = () => {
+
+    const history = useHistory();
 
     const [loginForm, setLoginForm] = useState({login: '', password: ''});
     const [isFormValid, setIsFormValid] = useState(true);
@@ -27,9 +29,15 @@ export const LoginPage = () => {
     const loginRequest = () => {
         axios.post('http://localhost:8080/login', loginForm)
             .then(res => {
-                console.log('res ', res);
+                if(res.status === 200) {
+                    const {token, isAdmin} = res.data;
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('isAdmin', isAdmin);
+                    isAdmin ? history.push('/users') : history.push('/tasks');
+                }
             })
             .catch(err => {
+                console.error(err);
                 if(err.response.status === 401) {
                     setIsFormValid(false);
                 }
